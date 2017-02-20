@@ -274,8 +274,8 @@ private Dlg_confirm_action(java.awt.Frame parent, boolean modal) {
         init_key();
     }
 
-    public void do_pass(){
- 
+    public void do_pass(String message){
+        jLabel1.setText(message);
     }
     // <editor-fold defaultstate="collapsed" desc="Key">
     private void disposed() {

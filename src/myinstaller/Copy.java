@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.swing.JLabel;
 
 /**
  *
@@ -21,16 +22,24 @@ public class Copy {
 
     }
 
-    public static void and_paste(String path) {
+    public static void and_paste(String path, JLabel lbl) {
         InputStream inStream = Copy.class.getResourceAsStream("/resources/resources.zip");
         OutputStream outStream = null;
 
         try {
 
-            File afile = new File("C:\\Users\\Guinness\\Desktop\\copyy.png");
+            File file = new File(path);
+            if (!file.exists()) {
+                if (file.mkdir()) {
+                    System.out.println("Directory is created...");
+                    lbl.setText("Directory is created...");
+                } else {
+                    System.out.println("Failed to create directory...");
+                    lbl.setText("Failed to create directory...");
+                }
+            }
+
             File bfile = new File(path + "resources.zip");
-            
-//            inStream = new FileInputStream(afile);
             outStream = new FileOutputStream(bfile);
 
             byte[] buffer = new byte[1024];
@@ -46,10 +55,8 @@ public class Copy {
             inStream.close();
             outStream.close();
 
-            //delete the original file
-//            afile.delete();
-            System.out.println("File is copied successful!");
-
+            System.out.println("File is copied successful...");
+            lbl.setText("File is copied successful...");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

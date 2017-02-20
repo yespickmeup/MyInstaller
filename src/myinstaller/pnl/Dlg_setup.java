@@ -10,13 +10,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mijzcx.synapse.desk.utils.CloseDialog;
 import mijzcx.synapse.desk.utils.KeyMapping;
 import mijzcx.synapse.desk.utils.KeyMapping.KeyAction;
-import myinstaller.Copy;
 import myinstaller.Dlg_confirm_action;
 import myinstaller.Files;
 import myinstaller.Unzip;
@@ -24,8 +22,6 @@ import synsoftech.fields.Button;
 import synsoftech.fields.Field;
 import synsoftech.fields.Label;
 import synsoftech.util.Center;
-import utils.Backup;
-import utils.Sql;
 
 /**
  *
@@ -1296,7 +1292,7 @@ public class Dlg_setup extends javax.swing.JDialog {
                 System.out.println("Home: " + path);
 
 //                String path = "C:\\Users\\Guinness\\Desktop\\cop\\";
-                Copy.and_paste(path);
+//                Copy.and_paste(path);
 
                 //--------------------------
                 String business_name = jTextField1.getText();
@@ -1325,15 +1321,15 @@ public class Dlg_setup extends javax.swing.JDialog {
                 String source = path + "resources.zip";
                 String destination = path;
                 Unzip unzipper = new Unzip();
-                try {
-                    unzipper.unzip(source, destination);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+//                try {
+//                    unzipper.unzip(source, destination);
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
 
                 Files.field f = new Files.field(business_name, operated_by, address, telephone_number, tin_no, min_no, serial_no, permit_no, pos_no, accreditation_no, status, print_to_receipts, print_to_receipts2, img_path, pool_host, pool_port, pool_user, pool_password, my_db);
-                Files.make(path, f);
-                Files.make_batch(path);
+//                Files.make(path, f);
+//                Files.make_batch(path);
                 Files.create_shortcut(path);
 //                try {                   
 //                    Backup.Backupdbtosql(path);
@@ -1341,12 +1337,12 @@ public class Dlg_setup extends javax.swing.JDialog {
 //                } catch (URISyntaxException ex) {
 //                    Logger.getLogger(Dlg_setup.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-                try {
-                    Sql.create_db(pool_host, pool_port, pool_user, pool_password);
-                    Backup.Restoredbfromsql(path + "database.sql");
-                } catch (InterruptedException | URISyntaxException ex) {
-                    Logger.getLogger(Dlg_setup.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                try {
+//                    Sql.create_db(pool_host, pool_port, pool_user, pool_password);
+//                    Backup.Restoredbfromsql(path + "database.sql");
+//                } catch (InterruptedException | URISyntaxException ex) {
+//                    Logger.getLogger(Dlg_setup.class.getName()).log(Level.SEVERE, null, ex);
+//                }
                 cardLayout.show(pnl_holder, "6");
                 jProgressBar1.setString("Finished...");
                 jProgressBar1.setIndeterminate(false);

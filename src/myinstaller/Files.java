@@ -6,10 +6,13 @@
 package myinstaller;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
+import utils.DeEncrypter;
 import utils.WindowsUtils;
 
 /**
@@ -64,71 +67,59 @@ public class Files {
 
     }
 
-    public static void make(String path, field f) {
+    public static void make(String path, field f, String host, String terminal,JLabel lbl) {
         try {
-            String host = "";
-            String user = "";
-            String password = "";
-            String db_name = "";
-            String img_path = System.getProperty("user.home");
-            img_path = img_path.replaceAll("\\\\", "\\\\\\\\");
-            img_path = img_path + "\\\\";
-            String stmt = ""
-                    + "business_name=" + f.business_name + "\n"
-                    + "operated_by=" + f.operated_by + "\n"
-                    + "address=" + f.address + "\n"
-                    + "telephone_number=" + f.telephone_number + "\n"
-                    + "tin_no=TIN no: " + f.tin_no + "\n"
-                    + "min_no=MIN No.: " + f.min_no + "\n"
-                    + "serial_no=Serial No.: " + f.serial_no + "\n"
-                    + "permit_no=Permit No.: " + f.permit_no + "\n"
-                    + "pos_no=POS No.: " + f.pos_no + "\n"
-                    + "acct_no=Accreditation No.: " + f.accreditation_no + "\n"
-                    + "status= " + f.status + "\n"
-                    + "print_to_receipts=true" + "\n"
-                    + "print_to_receipts2=true" + "\n"
-                    + "img_path=" + img_path + "\n"
-                    + "pool_host=" + f.pool_host + ":" + f.pool_port + "\n"
-                    + "pool_user=" + f.pool_user + "\n"
-                    + "pool_password=" + f.pool_password + "\n"
-                    + "mydb=" + f.my_db + "\n"
-                    + "";
 
-            String text = "Your sample content to save in a text file.";
-            try (BufferedWriter out = new BufferedWriter(new FileWriter(path + "retail.conf"))) {
-                out.write(stmt);
+            String home = System.getProperty("user.home");
+
+            File file = new File(home + "\\my_config.conf");
+
+            if (!file.createNewFile()) {
+                System.out.println("my_config.conf file already exists...");
+                lbl.setText("my_config.conf file already exists...");
+            } else {
+                String license = DeEncrypter.encrypt("trial version");
+                String stmt = ""
+                        + "#configurations\n"
+                        + "environment=production\n"
+                        + "license_code=" + license + "\n"
+                        + "version=V.1.20170206\n"
+                        + "pool_host=" + host + "\n"
+                        + "terminal_number=" + terminal + "\n"
+                        + "hdd_drive=C\n"
+                        + "";
+
+                try (BufferedWriter out = new BufferedWriter(new FileWriter(home + "\\my_config.conf"))) {
+                    out.write(stmt);
+                }
+                System.out.println("my_config.conf successfully created...");
+                  lbl.setText("my_config.conf successfully created...");
             }
+
         } catch (IOException e) {
-            System.out.println("Exception ");
+            System.out.println(e);
         }
 
     }
 
-    public static void make_batch(String path) {
+    public static void make_batch(String path,JLabel lbl) {
         try {
-            String host = "";
-            String user = "";
-            String password = "";
-            String db_name = "";
-            String img_path = System.getProperty("user.home");
-            img_path = img_path.replaceAll("\\\\", "\\\\\\\\");
-            img_path = img_path + "\\\\";
 
             String stmt = ""
                     + "@echo on" + "\r\n"
-                    + "java -jar  \"" + path + "dist\\POS_Retail.jar\"" + "\r\n"
+                    + "java -jar  \"" + path + "dist\\SMIS.jar\"" + "\r\n"
                     + "";
 
             try (BufferedWriter out = new BufferedWriter(new FileWriter(path + "run.bat"))) {
                 out.write(stmt);
             }
         } catch (IOException e) {
-            System.out.println("Exception ");
+            System.out.println("Exception " + e);
         }
 
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         String name = "Maytopacka";
         String where = "C:\\Users\\Guinness\\Desktop\\cop\\POS.url";
         String target = "C:\\Users\\Guinness\\Desktop\\cop\\run.bat";
@@ -142,8 +133,8 @@ public class Files {
 
     public static void create_shortcut(String path) {
         String home = System.getProperty("user.home");
-        String name = "POS Retail";
-        String where = home + "\\Desktop\\" + "Point of Sale(POS).url";
+        String name = "SMIS";
+        String where = home + "\\Desktop\\" + "SMIS.url";
         String target = path + "run.bat";
         String icon = path + "logo.ico";
         try {

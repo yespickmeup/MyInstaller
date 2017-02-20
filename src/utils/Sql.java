@@ -9,8 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JLabel;
 
 /**
  *
@@ -25,10 +24,10 @@ public class Sql {
         System.out.println("Home: " + path2);
     }//end main
 
-    public static void create_db(String host, String port, String user, String password) {
+    public static void create_db(String host, String port, String user, String password,JLabel lbl) {
         String JDBC_DRIVER = "com.mysql.jdbc.Driver";
         String DB_URL = "jdbc:mysql://" + host + ":" + port + "/";
-        System.out.println(DB_URL);
+        System.out.println("Url: "+DB_URL);
         Connection conn = null;
         Statement stmt = null;
 
@@ -38,18 +37,21 @@ public class Sql {
 
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
+            lbl.setText("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, user, password);
 
             //STEP 4: Execute a query
             System.out.println("Creating database...");
+              lbl.setText("Creating database...");
             stmt = conn.createStatement();
 
-            String sql2 = "DROP DATABASE if exists db_fortune_three";
+            String sql2 = "DROP DATABASE if exists db_smis";
             stmt.executeUpdate(sql2);
 
-            String sql = "CREATE DATABASE db_fortune_three";
+            String sql = "CREATE DATABASE db_smis";
             stmt.executeUpdate(sql);
             System.out.println("Database created successfully...");
+             lbl.setText("Database created successfully...");
         } catch (SQLException | ClassNotFoundException se) {
             throw new RuntimeException(se);
         } finally {
@@ -69,7 +71,7 @@ public class Sql {
             }//end finally try
         }//end try
 
-        System.out.println(
-                "Goodbye!");
+//        System.out.println(
+//                "Goodbye!");
     }
 }

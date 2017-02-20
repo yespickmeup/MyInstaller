@@ -12,6 +12,7 @@ import java.security.CodeSource;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Backup {
         try {
 
             /*NOTE: Getting path to the Jar file being executed*/
-            /*NOTE: YourImplementingClass-> replace with the class executing the code*/
+ /*NOTE: YourImplementingClass-> replace with the class executing the code*/
             CodeSource codeSource = Backup.class.getProtectionDomain().getCodeSource();
             File jarFile = new File(codeSource.getLocation().toURI().getPath());
 //            String jarDir = jarFile.getParentFile().getPath();
@@ -39,7 +40,7 @@ public class Backup {
             String date = DateType.backup.format(new Date());
 
             /*NOTE: Creating Path Constraints for folder saving*/
-            /*NOTE: Here the backup folder is created for saving inside it*/
+ /*NOTE: Here the backup folder is created for saving inside it*/
             String folderPath = jarDir + "\\backup";
             System.out.println("Database: " + dbName);
             System.out.println("Host: " + host);
@@ -49,7 +50,7 @@ public class Backup {
             f1.mkdir();
 
             /*NOTE: Creating Path Constraints for backup saving*/
-            /*NOTE: Here the backup is saved in a folder called backup with the name backup.sql*/
+ /*NOTE: Here the backup is saved in a folder called backup with the name backup.sql*/
             String savePath = "\"" + jarDir + "\\backup\\" + date + "_" + dbName + ".sql\"";
 
             /*NOTE: Used to create a cmd command*/
@@ -74,45 +75,57 @@ public class Backup {
     }
 
     public static void main(String[] args) {
-        try {
-            //        try {
-//            Backupdbtosql();
-//           
+//        try {
+//            //        try {
+////            Backupdbtosql();
+////           
+////        } catch (URISyntaxException ex) {
+////            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+//            Restoredbfromsql("backup.sql");
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
 //        } catch (URISyntaxException ex) {
 //            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-            Restoredbfromsql("backup.sql");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Backup.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
-    public static void Restoredbfromsql(String s) throws InterruptedException, URISyntaxException {
+    public static void Restoredbfromsql(String s, JLabel lbl) throws InterruptedException, URISyntaxException {
         try {
             /*NOTE: String s is the mysql file name including the .sql in its name*/
-            /*NOTE: Getting path to the Jar file being executed*/
-            /*NOTE: YourImplementingClass-> replace with the class executing the code*/
+ /*NOTE: Getting path to the Jar file being executed*/
+ /*NOTE: YourImplementingClass-> replace with the class executing the code*/
             CodeSource codeSource = Backup.class.getProtectionDomain().getCodeSource();
             File jarFile = new File(codeSource.getLocation().toURI().getPath());
             String jarDir = jarFile.getParentFile().getPath();
 
             /*NOTE: Creating Database Constraints*/
-            String dbName = System.getProperty("mydb", "db_fortune_three");
+            String dbName = "db_smis";
             String dbUser = "root";
             String dbPass = "password";
             String host = System.getProperty("pool_host", "localhost");
-            host = host.replaceAll(":3306", "");
+
             System.out.println("Database: " + dbName);
             System.out.println("Host: " + host);
             /*NOTE: Creating Path Constraints for restoring*/
 //            String restorePath = jarDir + "\\backup" + "\\" + s;
             String restorePath = s;
-
+            
             /*NOTE: Used to create a cmd command*/
-            /*NOTE: Do not create a single large string, this will cause buffer locking, use string array*/
-            String[] executeCmd = new String[]{"mysql", dbName, "-u" + dbUser, "-p" + dbPass, "-h" + host, "-e", " source " + restorePath};
+ /*NOTE: Do not create a single large string, this will cause buffer locking, use string array*/
+            String[] executeCmd = new String[]{"C:\\Program Files\\MySQL\\MySQL Server 5.5\\bin\\mysql", dbName, "-u" + dbUser, "-p" + dbPass, "-h" + host, "-e", " source " + restorePath};
+
+            String bit = System.getProperty("os.arch");
+            if (bit.equalsIgnoreCase("x86")) {
+                executeCmd = new String[]{"C:\\Program Files (x86)\\MySQL\\MySQL Server 5.5\\bin\\mysql", dbName, "-u" + dbUser, "-p" + dbPass, "-h" + host, "-e", " source " + restorePath};
+
+            } else {
+                executeCmd = new String[]{"C:\\Program Files\\MySQL\\MySQL Server 5.5\\bin\\mysql", dbName, "-u" + dbUser, "-p" + dbPass, "-h" + host, "-e", " source " + restorePath};
+
+            }
+            for (String aw : executeCmd) {
+                System.out.println("Exec: " + aw);
+            }
 
             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
@@ -121,7 +134,9 @@ public class Backup {
             /*NOTE: processComplete=0 if correctly executed, will contain other values if not*/
             if (processComplete == 0) {
                 System.out.println("Successfully restored from SQL : " + s);
+                lbl.setText("Successfully restored from SQL : " + s);
             } else {
+                lbl.setText("Error at restoring");
                 System.out.println("Error at restoring");
             }
 

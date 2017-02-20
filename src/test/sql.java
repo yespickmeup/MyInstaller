@@ -5,12 +5,6 @@
  */
 package test;
 
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import myinstaller.pnl.Dlg_setup;
-import utils.Backup;
-
 /**
  *
  * @author Guinness
@@ -18,12 +12,12 @@ import utils.Backup;
 public class sql {
 
     public static void main(String[] args) {
-        try {
-            String path = "C:\\Users\\Guinness\\Desktop\\cop\\database.sql";
-            Backup.Restoredbfromsql(path);
-        } catch (InterruptedException | URISyntaxException ex) {
-            Logger.getLogger(Dlg_setup.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            String path = "C:\\Users\\Guinness\\Desktop\\cop\\database.sql";
+//            Backup.Restoredbfromsql(path);
+//        } catch (InterruptedException | URISyntaxException ex) {
+//            Logger.getLogger(Dlg_setup.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 }
