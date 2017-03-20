@@ -67,7 +67,7 @@ public class Files {
 
     }
 
-    public static void make(String path, field f, String host, String terminal,JLabel lbl) {
+    public static void make(String path, field f, String host, String terminal, JLabel lbl) {
         try {
 
             String home = System.getProperty("user.home");
@@ -87,13 +87,14 @@ public class Files {
                         + "pool_host=" + host + "\n"
                         + "terminal_number=" + terminal + "\n"
                         + "hdd_drive=C\n"
+                        + "auto_order=true\n"
                         + "";
 
                 try (BufferedWriter out = new BufferedWriter(new FileWriter(home + "\\my_config.conf"))) {
                     out.write(stmt);
                 }
                 System.out.println("my_config.conf successfully created...");
-                  lbl.setText("my_config.conf successfully created...");
+                lbl.setText("my_config.conf successfully created...");
             }
 
         } catch (IOException e) {
@@ -102,7 +103,7 @@ public class Files {
 
     }
 
-    public static void make_batch(String path,JLabel lbl) {
+    public static void make_batch(String path, JLabel lbl) {
         try {
 
             String stmt = ""
